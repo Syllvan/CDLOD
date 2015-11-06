@@ -1,4 +1,0 @@
-/home/sylvan/Downloads/CDLOD/CDLOD/build/lib/glfw/src/CMakeFiles/glfw.dir
-/home/sylvan/Downloads/CDLOD/CDLOD/build/lib/glew/CMakeFiles/libglew_static.dir
-/home/sylvan/Downloads/CDLOD/CDLOD/build/lib/glew/CMakeFiles/libglewmx_static.dir
-/home/sylvan/Downloads/CDLOD/CDLOD/build/CMakeFiles/main.dir
