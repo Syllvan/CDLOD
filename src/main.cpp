@@ -1,16 +1,8 @@
-/**
- * Main.cpp skeleton
- * Contributors:
- *      * Arthur Sonzogni
- * Licence:
- *      * MIT
- */
-
-#include "Application3D.hpp"
+#include "Game.h"
 
 int main(int argc, const char *argv[])
 {
-    Application3D app;
-    app.run();
+    Game game;
+    game.run();
     return 0;
 }
