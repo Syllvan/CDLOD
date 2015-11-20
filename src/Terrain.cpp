@@ -1,6 +1,10 @@
 #include "Terrain.h"
 
 Terrain::Terrain(HeightMap *h) {
+    
+    GLuint image = loadBMP_custom("./my_texture.bmp");
+
+
     heightMap = h;
 
     //should probably be defined in a settings class or be different?
@@ -41,7 +45,7 @@ Terrain::~Terrain() {
     }
 }
 
-void Terrain::render(Camera *camera) {
+void Terrain::render(glm::mat4 ViewMatrix, glm::vec3 CamPos) {
     //build renderlist
     std::stack<Node*> drawStack;
     for (unsigned int i = 0; i < grid.size(); i++) {

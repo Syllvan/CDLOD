@@ -5,14 +5,15 @@
 
 class Camera {
 public:
-    Camera();
-    Camera(glm::vec3 position, glm::vec3 direction);
-    Camera(const Camera& orig);
-    virtual ~Camera();
+    //Camera();
+    //Camera(glm::vec3 position, glm::vec3 direction);
+    //Camera(const Camera& orig);
+    //virtual ~Camera();
 
+    void computeMatricesFromInputs();
     glm::vec3 getPosition();
-
-    glm::vec3 getDirection();
+	glm::mat4 getView(); 
+	glm::mat4 getPerspective(); 
 
 private:
     glm::vec3 direction;
