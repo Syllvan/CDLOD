@@ -4,18 +4,20 @@
 #include <string>
 
 #include "glm/glm.hpp"
+#include "system/Application.hpp"
 
 #include "Camera.h"
 #include "HeightMap.h"
 #include "Terrain.h"
 
-class Game {
+class Game : public Application {
 public:
     Game();
     Game(const Game& orig);
     virtual ~Game();
 
-    void run();
+protected:
+    virtual void loop();
 
 private:
     Camera *camera;
