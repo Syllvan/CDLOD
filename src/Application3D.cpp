@@ -13,6 +13,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include "utils/glError.hpp"
+#include "Camera.h"
 
 #include <GLFW/glfw3.h>
 
@@ -137,14 +138,30 @@ void Application3D::loop()
     if (glfwWindowShouldClose(getWindow()))
         exit();
 
-    float t = getTime();
+    //float t = getTime();
     // set matrix
-    projection = glm::perspective(float(2.0*atan(getHeight()/1920.f)), getWindowRatio(), 0.1f, 100.f);
-    view  = glm::lookAt(
-        glm::vec3(20.0*sin(t),20.0*cos(t),20.0),
-        glm::vec3(0.0,0.0,0.0),
-        glm::vec3(0.0,0.0,1.0)
-    );
+    //projection = glm::perspective(float(2.0*atan(getHeight()/1920.f)), getWindowRatio(), 0.1f, 100.f);
+    //view  = glm::lookAt(
+    //    glm::vec3(20.0*sin(t),20.0*cos(t),20.0),
+    //    glm::vec3(0.0,0.0,0.0),
+    //    glm::vec3(0.0,0.0,1.0)
+    //);
+
+
+    //Create matrixes from camera
+    computeMatricesFromInputs(getWindow());
+    projection = getPerspective();
+    view = getView();
+    //glm::vec3 CamPos = getPosition(); 
+    //glm::mat4 ModelMatrix = glm::mat4(1.0);
+    //glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+
+    //set id for MVP matrix
+    //GLuint mvp_id = glGetUniformLocation(program_id, "MVP");
+    //send data with first position of MVP matrix to shader
+    //glUniformMatrix4fv(mvp_id, 1, GL_FALSE, &MVP[0][0]);
+
+
 
     // clear
     glClear(GL_COLOR_BUFFER_BIT);

@@ -13,6 +13,7 @@
 #include <glm/glm.hpp>
 #include "system/Application.hpp"
 #include "graphic/Shader.hpp"
+#include "Camera.h"
 
 class Application3D : public Application
 {

@@ -1,5 +1,5 @@
 // Include GLFW
-#include <glfw3.h>
+#include <GLFW/glfw3.h>
 
 // Include GLM
 #include <glm/glm.hpp>
@@ -7,29 +7,11 @@
 using namespace glm;
 
 #include "Camera.h"
-//Camera::Camera() {
-//}
-//Camera::Camera(glm::vec3 position, glm::mat4 direction) {
-//    this->position = position;
-//    this->direction = direction;
-//}
-//Camera::Camera(const Camera& orig) {
-//}
-//Camera::~Camera() {
-//}
+
 glm::mat4 ViewMatrix;
 glm::mat4 ProjectionMatrix;
 
-glm::vec3 getPosition() {
-    return position;
-}
-glm::mat4 getView(){
-	return ViewMatrix;
-}
-glm::mat4 getPerspective(){
-	return ProjectionMatrix;
-}
- 
+glm::vec3 position = glm::vec3( 0, 0, 5 ); 
 // Initial horizontal angle : toward -Z
 float horizontalAngle = 3.14f;
 // Initial vertical angle : none
@@ -40,7 +22,18 @@ float initialFoV = 45.0f;
 float speed = 3.0f; // 3 units / second
 float mouseSpeed = 0.005f;
 
-void computeMatricesFromInputs(){
+
+glm::vec3 getPosition() {
+    return position;
+}
+glm::mat4 getView(){
+	return ViewMatrix;
+}
+glm::mat4 getPerspective(){
+	return ProjectionMatrix;
+}
+
+void computeMatricesFromInputs(GLFWwindow* window){
 
 	// glfwGetTime is called only once, the first time this function is called
 	static double lastTime = glfwGetTime();
