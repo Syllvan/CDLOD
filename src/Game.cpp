@@ -22,9 +22,6 @@ Game::Game()
     terrain = new Terrain(heightMap);
 }
 
-Game::Game(const Game& orig) {
-}
-
 Game::~Game() {
     delete camera;
     delete heightMap;
@@ -32,8 +29,9 @@ Game::~Game() {
 }
 
 void Game::loop() {
+    glm::mat4 projection = glm::perspective(float(2.0*atan(getHeight()/1920.f)), getWindowRatio(), 0.1f, 100.f);
     if (glfwWindowShouldClose(getWindow()))
         exit();
 
-    terrain->render(camera);
+    terrain->render(camera, projection);
 }

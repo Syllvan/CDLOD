@@ -10,6 +10,8 @@ public:
     Camera(const Camera& orig);
     virtual ~Camera();
 
+    glm::mat4 getViewMatrix();
+
     glm::vec3 getPosition();
 
     glm::vec3 getDirection();

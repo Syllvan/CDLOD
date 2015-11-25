@@ -9,11 +9,11 @@
 #include "Camera.h"
 #include "HeightMap.h"
 #include "Terrain.h"
+#include "FlatMesh.h"
 
 class Game : public Application {
 public:
     Game();
-    Game(const Game& orig);
     virtual ~Game();
 
 protected:

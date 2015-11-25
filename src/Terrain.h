@@ -4,23 +4,32 @@
 #include <vector>
 #include <math.h>
 
+#include "graphic/Shader.hpp"
+
 #include "Node.h"
 #include "HeightMap.h"
 #include "Camera.h"
+#include "FlatMesh.h"
 
 class Terrain {
 public:
     Terrain(HeightMap *h);
-    Terrain(const Terrain& orig);
     virtual ~Terrain();
 
-    void render(Camera *camera);
+    void render(Camera *camera, glm::mat4 projection);
 private:
     HeightMap *heightMap;
     std::vector< std::vector<Node*> > grid;
     int lodDepth;
     float leafNodeSize;
     std::vector<int> ranges;
+
+    Shader vertexShader;
+    Shader fragmentShader;
+    ShaderProgram shaderProgram;
+
+    FlatMesh fullResMesh;
+    FlatMesh halfResMesh;
 };
 
 #endif	/* TERRAIN_H */
