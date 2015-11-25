@@ -40,8 +40,6 @@ FlatMesh::FlatMesh(int width, int height)
         index.push_back((x+0) + (width+1)*(y+0));
     }
 
-    std::cout << "vertices=" << vertices.size() << std::endl;
-    std::cout << "index=" << index.size() << std::endl;
     pointCount = index.size();
     ////////////////////////////
     //
@@ -63,6 +61,7 @@ FlatMesh::FlatMesh(int width, int height)
 
     // vao
     glGenVertexArrays( 1, &vao);
+    glBindVertexArray(0);
 }
 
 

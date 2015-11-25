@@ -45,6 +45,10 @@ Terrain::Terrain(HeightMap *h):
     fullResMesh.bind();
     shaderProgram.setAttribute("position", 3, sizeof(glm::vec3), 0);
     glBindVertexArray(0);
+
+    halfResMesh.bind();
+    shaderProgram.setAttribute("position", 3, sizeof(glm::vec3), 0);
+    glBindVertexArray(0);
 }
 
 Terrain::~Terrain() {
@@ -102,7 +106,6 @@ void Terrain::render(Camera *camera) {
         } else {
             color = glm::vec4(1.0,0.0,0.0,1.0);
         }
-        std::cout << current->getSize() << std::endl;
 
         float scale = current->getSize();
 
@@ -114,6 +117,7 @@ void Terrain::render(Camera *camera) {
         shaderProgram.setUniform("translation",translation);
         shaderProgram.setUniform("scale", scale);
         glCheckError(__FILE__,__LINE__);
+
         if ( current->isFullResolution() ) {
             drawMesh(&fullResMesh);
         } else {
