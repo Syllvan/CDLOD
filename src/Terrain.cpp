@@ -1,6 +1,8 @@
 #include "Terrain.h"
 #include "utils/glError.hpp"
 
+#include <iostream>
+
 #define SHADER_DIR "../shader/"
 
 Terrain::Terrain(HeightMap *h):
@@ -14,7 +16,7 @@ Terrain::Terrain(HeightMap *h):
 
     //should probably be defined in a settings class or be different?
     //see page 9 in the paper http://www.vertexasylum.com/downloads/cdlod/cdlod_latest.pdf
-    leafNodeSize = 32.0f;
+    leafNodeSize = 1.0f;
     lodDepth = 4;
 
     //construct level of detail ranges
@@ -76,43 +78,52 @@ void Terrain::render(Camera *camera) {
         }
     }
 
-    //TODO! actually drawing stuff!
-    while( !drawStack.empty() ) {
-        Node* current = drawStack.top();
-        drawStack.pop();
-
-        if ( current->isFullResolution() ) {
-            //use 32x32 mesh
-        } else {
-            //use 16x16 mesh
-        }
-
-        //get xPos, zPos and size of current, send to shader as uniforms
-        //maxHeight minHeight only used for debug rendering
-    }
-
     glm::mat4 view = camera->getViewMatrix();
     glm::mat4 projection = camera->getProjectionMatrix();
-
-    glm::vec4 color = glm::vec4(1.0f,1.0f,0.0f,1.0f);
 
     // clear
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0.0,0.0,0.0,0.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    shaderProgram.use();
+    //TODO! actually drawing stuff!
+    while( !drawStack.empty() ) {
+        Node* current = drawStack.top();
+        drawStack.pop();
 
-        // send uniforms
+
+        glm::vec4 color = glm::vec4(1.0, 0.0, 0.0, 1.0);
+        if(current->getSize() < 4.0) {
+            color = glm::vec4(1.0);
+        } else if(current->getSize() < 8.0) {
+            color = glm::vec4(0.0,1.0,0.0,1.0);
+        } else if(current->getSize() < 16.0) {
+            color = glm::vec4(0.0,0.0,1.0,1.0);
+        } else {
+            color = glm::vec4(1.0,0.0,0.0,1.0);
+        }
+        std::cout << current->getSize() << std::endl;
+
+        float scale = current->getSize();
+
+        glm::vec3 translation = glm::vec3(current->getXPos(),0.0,current->getZPos());
+        shaderProgram.use();
         shaderProgram.setUniform("projection",projection);
         shaderProgram.setUniform("view",view);
         shaderProgram.setUniform("color",color);
-
+        shaderProgram.setUniform("translation",translation);
+        shaderProgram.setUniform("scale", scale);
         glCheckError(__FILE__,__LINE__);
+        if ( current->isFullResolution() ) {
+            drawMesh(&fullResMesh);
+        } else {
+            drawMesh(&halfResMesh);
+        }
 
-        drawMesh(&fullResMesh);
         glBindVertexArray(0);
+        shaderProgram.unuse();
 
-    shaderProgram.unuse();
+    }
+
 }
 

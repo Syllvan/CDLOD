@@ -23,7 +23,9 @@ FlatMesh::FlatMesh(int width, int height)
     {
         float xx = (x-width/2);
         float yy = (y-height/2);
-        vertices.push_back(glm::vec3(xx,yy,0.0));
+        xx = x;
+        yy = y;
+        vertices.push_back(glm::vec3(xx/width,0.0,yy/height));
     }
 
     for(int y = 0; y<height; ++y)

@@ -31,7 +31,7 @@ private:
     glm::mat4 ViewMatrix;
     glm::mat4 ProjectionMatrix;
 
-    glm::vec3 position = glm::vec3( 0, 0, 5 );
+    glm::vec3 position = glm::vec3( 0, 1, 0 );
     // Initial horizontal angle : toward -Z
     float horizontalAngle = 3.14f;
     // Initial vertical angle : none
@@ -39,7 +39,7 @@ private:
     // Initial Field of View
     float initialFoV = 45.0f;
 
-    float speed = 10.0f; // 3 units / second
+    float speed = 1.0f; // 3 units / second
     float mouseSpeed = 0.2f;
 };
 
