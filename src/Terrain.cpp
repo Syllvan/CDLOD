@@ -53,6 +53,20 @@ Terrain::~Terrain() {
     }
 }
 
+void drawMesh(FlatMesh *mesh) {
+    mesh->bind();
+
+    static int inc = 1;
+    inc *= 2;
+    glCheckError(__FILE__,__LINE__);
+        glDrawElements(
+             GL_LINES,      // mode
+             mesh->getPointCount(),         // count
+             GL_UNSIGNED_INT,   // type
+             NULL               // element array buffer offset
+         );
+}
+
 void Terrain::render(Camera *camera) {
     //build renderlist
     std::stack<Node*> drawStack;
@@ -80,7 +94,7 @@ void Terrain::render(Camera *camera) {
     glm::mat4 view = camera->getViewMatrix();
     glm::mat4 projection = camera->getProjectionMatrix();
 
-    glm::vec4 color = glm::vec4(1.0f,0.0f,0.0f,1.0f);
+    glm::vec4 color = glm::vec4(1.0f,1.0f,0.0f,1.0f);
 
     // clear
     glClear(GL_COLOR_BUFFER_BIT);
@@ -92,21 +106,11 @@ void Terrain::render(Camera *camera) {
         // send uniforms
         shaderProgram.setUniform("projection",projection);
         shaderProgram.setUniform("view",view);
+        shaderProgram.setUniform("color",color);
 
         glCheckError(__FILE__,__LINE__);
 
-        fullResMesh.bind();
-
-        static int inc = 1;
-        inc *= 2;
-        glCheckError(__FILE__,__LINE__);
-            glDrawElements(
-                 GL_LINES,      // mode
-                 fullResMesh.getPointCount(),         // count
-                 GL_UNSIGNED_INT,   // type
-                 NULL               // element array buffer offset
-             );
-
+        drawMesh(&fullResMesh);
         glBindVertexArray(0);
 
     shaderProgram.unuse();

@@ -6,7 +6,7 @@
 #include <iostream>
 #include <vector>
 
-FlatMesh::FlatMesh(int width, int depth)
+FlatMesh::FlatMesh(int width, int height)
 {
     glCheckError(__FILE__,__LINE__);
     ////////////////////////////
@@ -18,15 +18,15 @@ FlatMesh::FlatMesh(int width, int depth)
     std::vector<GLuint> index;
 
 
-    for(int y = 0; y<=depth; ++y)
+    for(int y = 0; y<=height; ++y)
     for(int x = 0; x<=width; ++x)
     {
         float xx = (x-width/2);
-        float yy = (y-depth/2);
+        float yy = (y-height/2);
         vertices.push_back(glm::vec3(xx,yy,0.0));
     }
 
-    for(int y = 0; y<depth; ++y)
+    for(int y = 0; y<height; ++y)
     for(int x = 0; x<width; ++x)
     {
         index.push_back((x+0) + (width+1)*(y+0));

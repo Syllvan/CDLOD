@@ -11,11 +11,11 @@ public:
 
     int getWidth() {
         //TODO
-        return 1024;
+        return 512;
     }
     int getHeight() {
         //TODO
-        return 1024;
+        return 512;
     }
 
     float maxValArea(float x, float z, float width, float Height) {
