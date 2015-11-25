@@ -20,13 +20,11 @@ Camera::~Camera() {
 }
 
 glm::mat4 Camera::getViewMatrix() {
-    float t = clock()/100000.0f; //qucik and dirty time
-    glm::mat4 view = glm::lookAt(
-                    glm::vec3(20.0*sin(t),20.0*cos(t),20.0),
-                    glm::vec3(0.0,0.0,0.0),
-                    glm::vec3(0.0,0.0,1.0)
-                );
-    return view;
+    return viewMatrix;
+}
+
+glm::mat4 Camera::getProjectionMatrix() {
+    return projectionMatrix;
 }
 
 glm::vec3 Camera::getPosition() {

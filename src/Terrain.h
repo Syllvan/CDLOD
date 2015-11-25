@@ -16,7 +16,7 @@ public:
     Terrain(HeightMap *h);
     virtual ~Terrain();
 
-    void render(Camera *camera, glm::mat4 projection);
+    void render(Camera *camera);
 private:
     HeightMap *heightMap;
     std::vector< std::vector<Node*> > grid;

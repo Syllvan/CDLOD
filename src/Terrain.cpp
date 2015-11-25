@@ -53,7 +53,7 @@ Terrain::~Terrain() {
     }
 }
 
-void Terrain::render(Camera *camera, glm::mat4 projection) {
+void Terrain::render(Camera *camera) {
     //build renderlist
     std::stack<Node*> drawStack;
     for (unsigned int i = 0; i < grid.size(); i++) {
@@ -78,6 +78,8 @@ void Terrain::render(Camera *camera, glm::mat4 projection) {
     }
 
     glm::mat4 view = camera->getViewMatrix();
+    glm::mat4 projection = camera->getProjectionMatrix();
+
     glm::vec4 color = glm::vec4(1.0f,0.0f,0.0f,1.0f);
 
     // clear
