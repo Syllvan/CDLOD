@@ -97,17 +97,19 @@ void Terrain::render(Camera *camera) {
 
 
         glm::vec4 color = glm::vec4(1.0, 0.0, 0.0, 1.0);
-        if(current->getSize() < 4.0) {
+        if(current->getSize() < 2.0) {
             color = glm::vec4(1.0);
-        } else if(current->getSize() < 8.0) {
+        } else if(current->getSize() < 4.0) {
             color = glm::vec4(0.0,1.0,0.0,1.0);
-        } else if(current->getSize() < 16.0) {
+        } else if(current->getSize() < 8.0) {
             color = glm::vec4(0.0,0.0,1.0,1.0);
-        } else {
-            color = glm::vec4(1.0,0.0,0.0,1.0);
+        } else if(current->getSize() < 16.0) {
+            color = glm::vec4(1.0,1.0,0.0,1.0);
         }
 
         float scale = current->getSize();
+        float range = current->getRange(); //used for interpolation between resolutions
+        glm::vec3 cameraPos = camera->getPosition();
 
         glm::vec3 translation = glm::vec3(current->getXPos(),0.0,current->getZPos());
         shaderProgram.use();
@@ -116,6 +118,8 @@ void Terrain::render(Camera *camera) {
         shaderProgram.setUniform("color",color);
         shaderProgram.setUniform("translation",translation);
         shaderProgram.setUniform("scale", scale);
+        shaderProgram.setUniform("range", range);
+        shaderProgram.setUniform("cameraPos", cameraPos);
         glCheckError(__FILE__,__LINE__);
 
         if ( current->isFullResolution() ) {

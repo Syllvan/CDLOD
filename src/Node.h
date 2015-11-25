@@ -22,6 +22,7 @@ public:
     float getXPos() { return xPos; };
     float getZPos() { return zPos; };
     float getSize() { return size; };
+    float getRange() { return currentRange; };
 private:
     bool inSphere(float radius, glm::vec3 position);
     bool inFrustum(Camera *camera);
@@ -37,6 +38,7 @@ private:
     float zPos;
     float size;
     bool fullResolution;
+    float currentRange;
 };
 
 #endif	/* NODE_H */
