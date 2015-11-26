@@ -24,10 +24,14 @@ void main(void)
 	fColor = color;
 	vec3 worldPos = scale*position + translation;
 	float dist = distance(cameraPos, worldPos);
-	float rangeDist = 1.0 - smoothstep(0.0, 0.1, (range-dist)/scale);
+	float rangeDist = 1.0 - smoothstep(0.0, 1.0, (range-dist)/scale);
 	float morphVal = rangeDist;
 	fColor = color;
 	worldPos.xz = morphVertex(position.xz, worldPos.xz, morphVal);
+    
+	//height!
+	worldPos.y = 0.5*(sin(worldPos.x) + sin(worldPos.z));
+
     fPosition = view * vec4(worldPos,1.0);
 
     gl_Position = projection * fPosition;
