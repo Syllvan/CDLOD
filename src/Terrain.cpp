@@ -20,12 +20,14 @@ Terrain::Terrain(HeightMap *h):
     lodDepth = 4;
 
     //construct level of detail ranges
-    for (int i = 0; i < lodDepth; i++) {
-        ranges.push_back(leafNodeSize*pow(2,i+1));
+    ranges.push_back(2);
+    for (int i = 1; i < lodDepth; i++) {
+        ranges.push_back(ranges[i-1]*3);
+        std::cout << ranges[i-1] << std::endl;
     }
 
     //construct grid of cdlod quadtrees
-    float rootNodeSize = leafNodeSize*pow(2,lodDepth);
+    float rootNodeSize = leafNodeSize*pow(2,lodDepth-1);
 
 
     int gridWidth = floor(heightMap->getWidth()/rootNodeSize);
@@ -95,16 +97,21 @@ void Terrain::render(Camera *camera) {
         Node* current = drawStack.top();
         drawStack.pop();
 
-
+        float s = current->getSize();
+        float l = current->isFullResolution();
         glm::vec4 color = glm::vec4(1.0, 0.0, 0.0, 1.0);
-        if(current->getSize() < 2.0) {
+        if(s < 2.0) {
             color = glm::vec4(1.0);
-        } else if(current->getSize() < 4.0) {
+            if(!l) color = glm::vec4(0.5,1.0,0.5,1.0);
+        } else if(s < 4.0) {
             color = glm::vec4(0.0,1.0,0.0,1.0);
-        } else if(current->getSize() < 8.0) {
+            if(!l) color = glm::vec4(0.0,1.0,1.0,1.0);
+        } else if(s < 8.0) {
             color = glm::vec4(0.0,0.0,1.0,1.0);
-        } else if(current->getSize() < 16.0) {
+            if(!l) color = glm::vec4(1.0,0.0,1.0,1.0);
+        } else if(s < 16.0) {
             color = glm::vec4(1.0,1.0,0.0,1.0);
+            if(!l) color = glm::vec4(1.0,0.5,0.0,1.0);
         }
 
         float scale = current->getSize();

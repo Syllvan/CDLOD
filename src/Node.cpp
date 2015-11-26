@@ -1,4 +1,5 @@
 #include "Node.h"
+#include <iostream>
 
 Node::Node(HeightMap *heightMap, float nodeSize, int lodDepth, float x, float z) {
     xPos = x;
@@ -36,7 +37,7 @@ Node::~Node() {
 }
 
 bool Node::LODSelect( std::vector<int> &ranges, int lodLevel, Camera *camera, std::stack<Node*> &drawStack) {
-    currentRange = ranges[lodLevel+1];
+    currentRange = ranges[lodLevel];
     if ( !inSphere( ranges[lodLevel], camera->getPosition() ) ) {
         return false;
     }

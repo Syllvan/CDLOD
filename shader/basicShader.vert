@@ -26,6 +26,7 @@ void main(void)
 	float dist = distance(cameraPos, worldPos);
 	float rangeDist = 1.0 - smoothstep(0.0, 0.1, (range-dist)/scale);
 	float morphVal = rangeDist;
+	fColor = color;
 	worldPos.xz = morphVertex(position.xz, worldPos.xz, morphVal);
     fPosition = view * vec4(worldPos,1.0);
 

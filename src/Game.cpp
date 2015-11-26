@@ -96,6 +96,11 @@ bool Game::handleUserInput(GLFWwindow* window, Camera *camera){
 		position -= right * deltaTime * speed;
 	}
 
+	//lock position for testing
+	if (glfwGetKey( window, GLFW_KEY_SPACE ) == GLFW_PRESS){
+		poslock = !poslock;
+	}
+
 	float FoV = initialFoV;// - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
@@ -113,7 +118,7 @@ bool Game::handleUserInput(GLFWwindow* window, Camera *camera){
 
 	camera->projectionMatrix = ProjectionMatrix;
 	camera->viewMatrix = ViewMatrix;
-	camera->position = position;
+	if(!poslock) camera->position = position;
 	camera->direction = direction;
 
 	return true;
