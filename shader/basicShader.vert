@@ -9,8 +9,10 @@ uniform vec3 translation;
 uniform float scale;
 uniform float range;
 uniform vec3 cameraPos;
+uniform sampler2D myTextureSampler;
 
 out vec4 fPosition;
+out vec3 fWorldPosition;
 out vec4 fColor;
 
 vec2 gridDim = vec2(32.0,32.0);
@@ -22,17 +24,20 @@ vec2 morphVertex( vec2 gridPos, vec2 worldPos, float morph) {
 void main(void)
 {
 	fColor = color;
-	vec3 worldPos = scale*position + translation;
-	float dist = distance(cameraPos, worldPos);
+	fWorldPosition = scale*position + translation;
+	float height = length(texture2D( myTextureSampler, vec2(fWorldPosition.x, fWorldPosition.z)/100.0).rgb);
+	height *= 1.0f;
+	float dist = distance(cameraPos, fWorldPosition);
 	float rangeDist = 1.0 - smoothstep(0.0, 1.0, (range-dist)/scale);
 	float morphVal = rangeDist;
 	fColor = color;
-	worldPos.xz = morphVertex(position.xz, worldPos.xz, morphVal);
+	fWorldPosition.xz = morphVertex(position.xz, fWorldPosition.xz, morphVal);
     
 	//height!
-	worldPos.y = 0.5*(sin(worldPos.x) + sin(worldPos.z));
+	fWorldPosition.y = height; 
+	// * 0.5*(sin(fWorldPosition.x) + sin(fWorldPosition.z));
 
-    fPosition = view * vec4(worldPos,1.0);
+    fPosition = view * vec4(fWorldPosition,1.0);
 
     gl_Position = projection * fPosition;
 }

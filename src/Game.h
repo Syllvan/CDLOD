@@ -15,6 +15,7 @@ class Game : public Application {
 public:
     Game();
     virtual ~Game();
+    GLuint loadDDS(const char * imagepath);
 
 protected:
     virtual void loop();

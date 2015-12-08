@@ -4,9 +4,7 @@ HeightMap::HeightMap() {
 }
 
 HeightMap::HeightMap(std::string fileName) {
-    //TODO
 }
-
 
 HeightMap::~HeightMap() {
 }
