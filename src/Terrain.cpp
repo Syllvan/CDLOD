@@ -73,7 +73,7 @@ void drawMesh(FlatMesh *mesh) {
 
     static int inc = 1;
     inc *= 2;
-    glCheckError(__FILE__,__TRIANGLE__);
+    glCheckError(__FILE__,__LINE__);
         glDrawElements(
              GL_LINES,      // mode
              mesh->getPointCount(),         // count
@@ -179,7 +179,7 @@ void Terrain::render(Camera *camera) {
     shaderProgram.use();
 
     // Load texture
-    GLuint Texture = loadDDS("rock1.DDS");
+    GLuint Texture = loadDDS("../Textures/rock1.DDS");
     // Use texture position 0 on GPU
     int texturePosition = 0;
     glActiveTexture(GL_TEXTURE0 + texturePosition);
