@@ -31,9 +31,9 @@ Terrain::Terrain(HeightMap *h):
     lodDepth = 6;
 
     //construct level of detail ranges
-    ranges.push_back(2);
+    ranges.push_back(1);
     for (int i = 1; i < lodDepth; i++) {
-        ranges.push_back(ranges[i-1]*3);
+        ranges.push_back(ranges[i-1] + pow(2.1,i));
         std::cout << ranges[i-1] << std::endl;
     }
 
@@ -169,8 +169,10 @@ void Terrain::debugRender(Camera *camera) {
         glCheckError(__FILE__,__LINE__);
 
         if ( current->isFullResolution() ) {
+            shaderDebug.setUniform("gridDim", glm::vec3(32,32,0));
             drawMesh(&fullResMesh,GL_LINES);
         } else {
+            shaderDebug.setUniform("gridDim", glm::vec3(16,16,0));
             drawMesh(&halfResMesh,GL_LINES);
         }
 
@@ -303,8 +305,10 @@ void Terrain::render(Camera *camera) {
         glCheckError(__FILE__,__LINE__);
 
         if ( current->isFullResolution() ) {
+            shaderTerrain.setUniform("gridDim", glm::vec3(32,32,0));
             drawMesh(&fullResMesh,GL_TRIANGLES);
         } else {
+            shaderTerrain.setUniform("gridDim", glm::vec3(16,16,0));
             drawMesh(&halfResMesh,GL_TRIANGLES);
         }
 
