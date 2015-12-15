@@ -8,6 +8,12 @@
 
 #include <GLFW/glfw3.h>
 
+char keyOnce[GLFW_KEY_LAST + 1];
+#define glfwGetKeyOnce(WINDOW, KEY)             \
+    (glfwGetKey(WINDOW, KEY) ?              \
+     (keyOnce[KEY] ? false : (keyOnce[KEY] = true)) :   \
+     (keyOnce[KEY] = false))
+
 Game::Game()
     : Application()
 {
@@ -21,6 +27,7 @@ Game::Game()
     heightMap = new HeightMap("../Textures/fractalnoise.bmp");
     terrain = new Terrain(heightMap);
     glfwSetInputMode(getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    glfwSetInputMode(getWindow(), GLFW_STICKY_KEYS, 1);
 }
 
 Game::~Game() {
@@ -99,17 +106,22 @@ bool Game::handleUserInput(GLFWwindow* window, Camera *camera){
 	}
 
 	//lock position for testing
-	if (glfwGetKey( window, GLFW_KEY_SPACE ) == GLFW_PRESS){
+	if (glfwGetKeyOnce( window, GLFW_KEY_SPACE )){
 		poslock = !poslock;
 	}
 
-    if (glfwGetKey( window, GLFW_KEY_K ) == GLFW_PRESS){
+    if (glfwGetKeyOnce( window, GLFW_KEY_K )){
         if (hidden_cursor) {
             glfwSetInputMode(getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         } else {
             glfwSetInputMode(getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
         }
         hidden_cursor = !hidden_cursor;
+    }
+
+    if (glfwGetKeyOnce( window, GLFW_KEY_R )){
+        render_debug_mode = !render_debug_mode;
+        std::cout << "debug render: " << render_debug_mode << std::endl;
     }
 
 	float FoV = initialFoV;// - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.

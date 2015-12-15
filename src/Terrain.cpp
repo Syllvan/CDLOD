@@ -18,6 +18,9 @@ Terrain::Terrain(HeightMap *h):
     fragmentShader(SHADER_DIR"/basicShader.frag",GL_FRAGMENT_SHADER),
     shaderProgram({vertexShader,fragmentShader}),
     debugShader({vertexDebug,fragmentShader}),
+    vertexTerrain(SHADER_DIR"/terrainShader.vert",GL_VERTEX_SHADER),
+    fragmentTerrain(SHADER_DIR"/terrainShader.frag",GL_FRAGMENT_SHADER),
+    terrainShader({vertexTerrain,fragmentTerrain}),
     fullResMesh(32,32),
     halfResMesh(16,16)
 {
@@ -26,7 +29,7 @@ Terrain::Terrain(HeightMap *h):
     //should probably be defined in a settings class or be different?
     //see page 9 in the paper http://www.vertexasylum.com/downloads/cdlod/cdlod_latest.pdf
     leafNodeSize = 1.0f;
-    lodDepth = 5;
+    lodDepth = 6;
 
     //construct level of detail ranges
     ranges.push_back(2);
@@ -155,9 +158,9 @@ void Terrain::render(Camera *camera) {
         glCheckError(__FILE__,__LINE__);
 
         if ( current->isFullResolution() ) {
-            drawMesh(&fullResMesh,GL_LINES);
+            drawMesh(&fullResMesh,GL_TRIANGLES);
         } else {
-            drawMesh(&halfResMesh,GL_LINES);
+            drawMesh(&halfResMesh,GL_TRIANGLES);
         }
 
         glBindVertexArray(0);
@@ -175,9 +178,10 @@ void Terrain::render(Camera *camera) {
         drawMesh(&halfResMesh,GL_TRIANGLES);
         glBindVertexArray(0);
         debugShader.unuse();
-        */
+*/
 
     }
 
 }
+
 

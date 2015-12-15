@@ -26,14 +26,14 @@ void main(void)
 	fColor = color;
 	fWorldPosition = scale*position + translation;
 	float height = texture( myTextureSampler, vec2(fWorldPosition.x, fWorldPosition.z)/100.0).r;
-	height = (height - 0.5)*20.0;
+	float detail = texture( myTextureSampler, vec2(fWorldPosition.x, fWorldPosition.z)).r*0.1;
+	height = (height - 0.5)*21.0 + detail;
+	height *= 1.0f;
 	float dist = distance(cameraPos, fWorldPosition);
-	float rangeDist = 1.0 - smoothstep(0.2, 0.8, (range-dist)/scale);
+	float rangeDist = 1.0 - smoothstep(0.4, 1.0, (range-dist)/scale);
 	float morphVal = rangeDist;
 	fColor = color;
 	fWorldPosition.xz = morphVertex(position.xz, fWorldPosition.xz, morphVal);
-	height = texture( myTextureSampler, vec2(fWorldPosition.x, fWorldPosition.z)/100.0).r;
-	height = (height - 0.5)*20.0;
     
 	//height!
 	fWorldPosition.y = height; 

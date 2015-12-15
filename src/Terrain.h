@@ -15,7 +15,6 @@ class Terrain {
 public:
     Terrain(HeightMap *h);
     virtual ~Terrain();
-
     void render(Camera *camera);
 private:
     HeightMap *heightMap;
@@ -29,6 +28,10 @@ private:
     Shader fragmentShader;
     ShaderProgram shaderProgram;
     ShaderProgram debugShader;
+
+    ShaderProgram terrainShader;
+    Shader vertexTerrain;
+    Shader fragmentTerrain;
 
     FlatMesh fullResMesh;
     FlatMesh halfResMesh;
