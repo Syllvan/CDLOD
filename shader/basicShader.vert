@@ -22,19 +22,21 @@ vec2 morphVertex( vec2 gridPos, vec2 worldPos, float morph) {
 	return worldPos - fracPart * scale * morph;
 }
 
+float getHeight(vec2 v) {
+	return 20.0*(texture( myTextureSampler, v/100.0).r - 0.5);
+}
+
 void main(void)
 {
 	fColor = color;
 	fWorldPosition = scale*position + translation;
-	float height = texture( myTextureSampler, vec2(fWorldPosition.x, fWorldPosition.z)/100.0).r;
-	height = (height - 0.5)*20.0;
+	float height = getHeight(fWorldPosition.xz);
 	float dist = distance(cameraPos, fWorldPosition);
-	float rangeDist = 1.0 - smoothstep(0.1, 0.9, (range-dist)/scale); //range-dist is positive if within range
+	float rangeDist = 1.0 - smoothstep(0.2, 0.8, (range-dist)/scale); //range-dist is positive if within range
 	float morphVal = rangeDist;
 	fColor = color;
 	fWorldPosition.xz = morphVertex(position.xz, fWorldPosition.xz, morphVal);
-	height = texture( myTextureSampler, vec2(fWorldPosition.x, fWorldPosition.z)/100.0).r;
-	height = (height - 0.5)*20.0;
+	height = getHeight(fWorldPosition.xz);
     
 	//height!
 	fWorldPosition.y = height; 

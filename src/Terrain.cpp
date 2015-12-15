@@ -199,7 +199,6 @@ void Terrain::areaRender(Camera *camera) {
     glm::vec3 cameraPos = camera->getPosition();
     shaderArea.setUniform("projection",projection);
     shaderArea.setUniform("view",view);
-    shaderArea.setUniform("cameraPos", cameraPos);
 
     //TODO! actually drawing stuff!
     while( !drawStack.empty() ) {
@@ -251,7 +250,7 @@ void Terrain::areaRender(Camera *camera) {
 void Terrain::render(Camera *camera) {
 
     // Use our compiled shader program
-    shaderDebug.use();
+    shaderTerrain.use();
 
     // Load texture
     GLuint Texture = heightMap->getTexture();
@@ -262,7 +261,7 @@ void Terrain::render(Camera *camera) {
     glBindTexture(GL_TEXTURE_2D, Texture);
 
     // Tell shader to sample from this texture position
-    shaderDebug.setUniform("myTextureSampler", texturePosition);
+    shaderTerrain.setUniform("myTextureSampler", texturePosition);
 
 
     //build renderlist
@@ -282,9 +281,9 @@ void Terrain::render(Camera *camera) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glm::vec3 cameraPos = camera->getPosition();
-    shaderDebug.setUniform("projection",projection);
-    shaderDebug.setUniform("view",view);
-    shaderDebug.setUniform("cameraPos", cameraPos);
+    shaderTerrain.setUniform("projection",projection);
+    shaderTerrain.setUniform("view",view);
+    shaderTerrain.setUniform("cameraPos", cameraPos);
 
     //TODO! actually drawing stuff!
     while( !drawStack.empty() ) {
@@ -293,32 +292,14 @@ void Terrain::render(Camera *camera) {
 
         float s = current->getSize();
         float l = current->isFullResolution();
-        glm::vec4 color = glm::vec4(0.5, 0.5, 0.5, 1.0);
-        if(s < 2.0) {
-            color = glm::vec4(1.0);
-            if(!l) color = glm::vec4(0.5,1.0,0.5,1.0);
-        } else if(s < 4.0) {
-            color = glm::vec4(0.0,1.0,0.0,1.0);
-            if(!l) color = glm::vec4(0.0,1.0,1.0,1.0);
-        } else if(s < 8.0) {
-            color = glm::vec4(0.0,0.0,1.0,1.0);
-            if(!l) color = glm::vec4(1.0,0.0,1.0,1.0);
-        } else if(s < 16.0) {
-            color = glm::vec4(1.0,1.0,0.0,1.0);
-            if(!l) color = glm::vec4(1.0,0.5,0.0,1.0);
-        } else if(s < 32.0) {
-            color = glm::vec4(0.8,0.5,0.2,1.0);
-            if(!l) color = glm::vec4(1.0,0.0,0.0,1.0);
-        }
 
         float scale = current->getSize();
         float range = current->getRange(); //used for interpolation between resolutions
 
         glm::vec3 translation = glm::vec3(current->getXPos(),0.0,current->getZPos());
-        shaderDebug.setUniform("color",color);
-        shaderDebug.setUniform("translation",translation);
-        shaderDebug.setUniform("scale", scale);
-        shaderDebug.setUniform("range", range);
+        shaderTerrain.setUniform("translation",translation);
+        shaderTerrain.setUniform("scale", scale);
+        shaderTerrain.setUniform("range", range);
         glCheckError(__FILE__,__LINE__);
 
         if ( current->isFullResolution() ) {
@@ -330,7 +311,7 @@ void Terrain::render(Camera *camera) {
         glBindVertexArray(0);
 
     }
-    shaderDebug.unuse();
+    shaderTerrain.unuse();
 }
 
 

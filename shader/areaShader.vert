@@ -8,7 +8,6 @@ uniform vec4 color;
 uniform vec3 translation;
 uniform float scale;
 uniform float mnmx;
-uniform vec3 cameraPos;
 
 out vec4 fPosition;
 out vec3 fWorldPosition;
