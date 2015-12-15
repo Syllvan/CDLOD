@@ -2,7 +2,7 @@
 # │  Projects Settings                                               │
 # └──────────────────────────────────────────────────────────────────┘
 cmake_minimum_required (VERSION 2.8)
-project (opengl-skeleton)
+project (CDLOD)
 
 # ┌──────────────────────────────────────────────────────────────────┐
 # │  Compilation flags                                               │

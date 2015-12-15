@@ -29,8 +29,8 @@ Application& Application::getInstance()
 
 Application::Application():
     state(stateReady),
-    width(640),
-    height(480),
+    width(800),
+    height(600),
     title("Application")
 {
     currentApplication=this;
@@ -73,7 +73,7 @@ Application::Application():
 
     // get version info
     const GLubyte* renderer = glGetString (GL_RENDERER);
-    const GLubyte* version = glGetString (GL_VERSION); 
+    const GLubyte* version = glGetString (GL_VERSION);
     cout << "Renderer: " << renderer << endl;
     cout << "OpenGL version supported " << version << endl;
 
@@ -122,7 +122,7 @@ void Application::run()
         float t = glfwGetTime();
         deltaTime = t - time;
         time = t;
-        
+
         // detech window related changes
         detectWindowDimensionChange();
 
@@ -135,7 +135,7 @@ void Application::run()
         // Pool and process events
         glfwPollEvents();
     }
-    
+
     glfwTerminate();
 }
 
@@ -144,7 +144,7 @@ void Application::detectWindowDimensionChange()
     int w,h;
     glfwGetWindowSize(getWindow(), &w, &h);
     dimensionChange = ( w!= width or h != height) ;
-    if (dimensionChange) 
+    if (dimensionChange)
     {
         width = w;
         height = h;

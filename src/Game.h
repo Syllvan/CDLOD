@@ -40,10 +40,11 @@ private:
     // Initial Field of View
     float initialFoV = 45.0f;
 
-    float speed = 2.0f; // 3 units / second
+    float speed = 5.0f; // 3 units / second
     float mouseSpeed = 0.2f;
 
     bool poslock = false;
+    bool hidden_cursor = true;
 };
 
 #endif	/* GAME_H */

@@ -1,34 +1,26 @@
 #ifndef HEIGHTMAP_H
 #define	HEIGHTMAP_H
 
+#include <GL/glew.h>
 #include <string>
 
 class HeightMap {
 public:
-    HeightMap();
-    HeightMap(std::string fileName);
+    HeightMap(char* filepath);
     virtual ~HeightMap();
 
-    int getWidth() {
-        //TODO
-        return 512;
-    }
-    int getHeight() {
-        //TODO
-        return 512;
-    }
-
-    float maxValArea(float x, float z, float width, float Height) {
-        //TODO
-        return 1;
-    }
-
-    float minValArea(float x, float z, float width, float height) {
-        //TODO
-        return -1;
-    }
+    int getWidth();
+    int getHeight();
+    float maxValArea(float x, float z, float width, float Height);
+    float minValArea(float x, float z, float width, float height);
+    float getVal(float x, float y);
+    GLuint getTexture();
 
 private:
+    unsigned char * data;
+    int width;
+    int height;
+    GLuint textureID;
 
 };
 

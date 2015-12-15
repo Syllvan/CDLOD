@@ -25,7 +25,8 @@ void main(void)
 {
 	fColor = color;
 	fWorldPosition = scale*position + translation;
-	float height = length(texture( myTextureSampler, vec2(fWorldPosition.x, fWorldPosition.z)/100.0).rgb);
+	vec4 texv = texture( myTextureSampler, vec2(fWorldPosition.x, fWorldPosition.z)/100.0).rgba;
+	float height = (texv.r - 0.5)*20.0; //should not be hardcoded
 	height *= 1.0f;
 	float dist = distance(cameraPos, fWorldPosition);
 	float rangeDist = 1.0 - smoothstep(0.0, 1.0, (range-dist)/scale);

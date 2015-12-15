@@ -18,8 +18,9 @@ Game::Game()
     glm::vec3 direction = glm::vec3(0.0f,0.0f,1.0f);
 
     camera = new Camera(position, direction);
-    heightMap = new HeightMap("heightMap.bmp");
+    heightMap = new HeightMap("../Textures/fractalnoise.bmp");
     terrain = new Terrain(heightMap);
+    glfwSetInputMode(getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 }
 
 Game::~Game() {
@@ -53,11 +54,12 @@ bool Game::handleUserInput(GLFWwindow* window, Camera *camera){
 	glfwGetCursorPos(window, &xpos, &ypos);
 
 	// Reset mouse position for next frame
-	glfwSetCursorPos(window, 1024/2, 768/2);
-
-	// Compute new orientation
-	horizontalAngle += mouseSpeed * deltaTime * float(1024/2 - xpos );
-	verticalAngle   += mouseSpeed * deltaTime * float( 768/2 - ypos );
+	if(hidden_cursor) {
+        glfwSetCursorPos(window, 1024/2, 768/2);
+        // Compute new orientation
+        horizontalAngle += mouseSpeed * deltaTime * float(1024/2 - xpos );
+        verticalAngle   += mouseSpeed * deltaTime * float( 768/2 - ypos );
+	}
 
     if(verticalAngle > 3.14/2) verticalAngle = 3.14/2;
     else if(verticalAngle < -3.14/2) verticalAngle = -3.14/2;
@@ -100,6 +102,15 @@ bool Game::handleUserInput(GLFWwindow* window, Camera *camera){
 	if (glfwGetKey( window, GLFW_KEY_SPACE ) == GLFW_PRESS){
 		poslock = !poslock;
 	}
+
+    if (glfwGetKey( window, GLFW_KEY_K ) == GLFW_PRESS){
+        if (hidden_cursor) {
+            glfwSetInputMode(getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        } else {
+            glfwSetInputMode(getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        }
+        hidden_cursor = !hidden_cursor;
+    }
 
 	float FoV = initialFoV;// - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.
 
