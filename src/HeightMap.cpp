@@ -72,16 +72,19 @@ int HeightMap::getHeight() {
 }
 
 float HeightMap::getVal(float x, float y) {
-    int i = (int)(x*5.12)%width;
-    int j = (int)(y*5.12)%height;
-    unsigned char charval = data[(i + j*width)*3]; //read red color channel
+    int i = (int)x%width;
+    int j = (int)y%height;
+    unsigned char charval = data[(i + j*width)*3] + 1; //read red color channel
     float val = 20.0f*(charval/255.0f - 0.5f);
     return val;
 }
 
 float HeightMap::maxValArea(float x, float z, float w, float h) {
     float maxVal = -999999.0f;
-
+    x *= 5.12;
+    z *= 5.12;
+    w *= 5.12;
+    h *= 5.12;
     for(float i = x; i < x+w; i++)
     for(float j = z; j < z+h; j++){
         float newVal = getVal(i,j);

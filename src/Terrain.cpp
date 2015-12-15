@@ -10,11 +10,18 @@
 #define SHADER_DIR "../shader/"
 
 Terrain::Terrain(HeightMap *h):
-    vertexShader(SHADER_DIR"/basicShader.vert",GL_VERTEX_SHADER),
-    fragmentShader(SHADER_DIR"/basicShader.frag",GL_FRAGMENT_SHADER),
-    shaderProgram({vertexShader,fragmentShader}),
+    vertexDebug(SHADER_DIR"/basicShader.vert",GL_VERTEX_SHADER),
+    fragmentDebug(SHADER_DIR"/basicShader.frag",GL_FRAGMENT_SHADER),
+    shaderDebug({vertexDebug,fragmentDebug}),
+    vertexTerrain(SHADER_DIR"/terrainShader.vert",GL_VERTEX_SHADER),
+    fragmentTerrain(SHADER_DIR"/terrainShader.frag",GL_FRAGMENT_SHADER),
+    shaderTerrain({vertexTerrain,fragmentTerrain}),
+    vertexArea(SHADER_DIR"/areaShader.vert",GL_VERTEX_SHADER),
+    fragmentArea(SHADER_DIR"/areaShader.frag",GL_FRAGMENT_SHADER),
+    shaderArea({vertexArea,fragmentArea}),
     fullResMesh(32,32),
-    halfResMesh(16,16)
+    halfResMesh(16,16),
+    simpleMesh(1,1)
 {
     heightMap = h;
 
@@ -47,13 +54,22 @@ Terrain::Terrain(HeightMap *h):
         }
     }
 
-    //opengl stuff
     fullResMesh.bind();
-    shaderProgram.setAttribute("position", 3, sizeof(glm::vec3), 0);
+    shaderDebug.setAttribute("position", 3, sizeof(glm::vec3), 0);
+    glBindVertexArray(0);
+    halfResMesh.bind();
+    shaderDebug.setAttribute("position", 3, sizeof(glm::vec3), 0);
     glBindVertexArray(0);
 
+    fullResMesh.bind();
+    shaderTerrain.setAttribute("position", 3, sizeof(glm::vec3), 0);
+    glBindVertexArray(0);
     halfResMesh.bind();
-    shaderProgram.setAttribute("position", 3, sizeof(glm::vec3), 0);
+    shaderTerrain.setAttribute("position", 3, sizeof(glm::vec3), 0);
+    glBindVertexArray(0);
+
+    simpleMesh.bind();
+    shaderArea.setAttribute("position", 3, sizeof(glm::vec3), 0);
     glBindVertexArray(0);
 }
 
@@ -79,10 +95,10 @@ void drawMesh(FlatMesh *mesh, GLenum type) {
          );
 }
 
-void Terrain::render(Camera *camera) {
+void Terrain::debugRender(Camera *camera) {
 
     // Use our compiled shader program
-    shaderProgram.use();
+    shaderDebug.use();
 
     // Load texture
     GLuint Texture = heightMap->getTexture();
@@ -93,7 +109,7 @@ void Terrain::render(Camera *camera) {
     glBindTexture(GL_TEXTURE_2D, Texture);
 
     // Tell shader to sample from this texture position
-    shaderProgram.setUniform("myTextureSampler", texturePosition);
+    shaderDebug.setUniform("myTextureSampler", texturePosition);
 
 
     //build renderlist
@@ -111,6 +127,11 @@ void Terrain::render(Camera *camera) {
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0.0,0.0,0.0,0.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glm::vec3 cameraPos = camera->getPosition();
+    shaderDebug.setUniform("projection",projection);
+    shaderDebug.setUniform("view",view);
+    shaderDebug.setUniform("cameraPos", cameraPos);
 
     //TODO! actually drawing stuff!
     while( !drawStack.empty() ) {
@@ -139,17 +160,12 @@ void Terrain::render(Camera *camera) {
 
         float scale = current->getSize();
         float range = current->getRange(); //used for interpolation between resolutions
-        glm::vec3 cameraPos = camera->getPosition();
 
         glm::vec3 translation = glm::vec3(current->getXPos(),0.0,current->getZPos());
-        shaderProgram.use();
-        shaderProgram.setUniform("projection",projection);
-        shaderProgram.setUniform("view",view);
-        shaderProgram.setUniform("color",color);
-        shaderProgram.setUniform("translation",translation);
-        shaderProgram.setUniform("scale", scale);
-        shaderProgram.setUniform("range", range);
-        shaderProgram.setUniform("cameraPos", cameraPos);
+        shaderDebug.setUniform("color",color);
+        shaderDebug.setUniform("translation",translation);
+        shaderDebug.setUniform("scale", scale);
+        shaderDebug.setUniform("range", range);
         glCheckError(__FILE__,__LINE__);
 
         if ( current->isFullResolution() ) {
@@ -159,10 +175,163 @@ void Terrain::render(Camera *camera) {
         }
 
         glBindVertexArray(0);
-        shaderProgram.unuse();
 
     }
-
+    shaderDebug.unuse();
 }
+
+void Terrain::areaRender(Camera *camera) {
+    glEnable (GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // Use our compiled shader program
+    shaderArea.use();
+    //build renderlist
+    std::stack<Node*> drawStack;
+    for (unsigned int i = 0; i < grid.size(); i++) {
+        for (unsigned int j = 0; j < grid[0].size(); j++) {
+            grid[i][j]->LODSelect( ranges, lodDepth-1, camera, drawStack);
+        }
+    }
+
+    glm::mat4 view = camera->getViewMatrix();
+    glm::mat4 projection = camera->getProjectionMatrix();
+
+    glm::vec3 cameraPos = camera->getPosition();
+    shaderArea.setUniform("projection",projection);
+    shaderArea.setUniform("view",view);
+    shaderArea.setUniform("cameraPos", cameraPos);
+
+    //TODO! actually drawing stuff!
+    while( !drawStack.empty() ) {
+        Node* current = drawStack.top();
+        drawStack.pop();
+
+        float s = current->getSize();
+        float l = current->isFullResolution();
+        glm::vec4 color = glm::vec4(0.5, 0.5, 0.5, 1.0);
+        if(s < 2.0) {
+            color = glm::vec4(1.0);
+            if(!l) color = glm::vec4(0.5,1.0,0.5,1.0);
+        } else if(s < 4.0) {
+            color = glm::vec4(0.0,1.0,0.0,1.0);
+            if(!l) color = glm::vec4(0.0,1.0,1.0,1.0);
+        } else if(s < 8.0) {
+            color = glm::vec4(0.0,0.0,1.0,1.0);
+            if(!l) color = glm::vec4(1.0,0.0,1.0,1.0);
+        } else if(s < 16.0) {
+            color = glm::vec4(1.0,1.0,0.0,1.0);
+            if(!l) color = glm::vec4(1.0,0.5,0.0,1.0);
+        } else if(s < 32.0) {
+            color = glm::vec4(0.8,0.5,0.2,1.0);
+            if(!l) color = glm::vec4(1.0,0.0,0.0,1.0);
+        }
+
+        float scale = current->getSize();
+        float range = current->getRange(); //used for interpolation between resolutions
+
+        glm::vec3 translation = glm::vec3(current->getXPos(),0.0,current->getZPos());
+        shaderArea.setUniform("color",color);
+        shaderArea.setUniform("translation",translation);
+        shaderArea.setUniform("scale", scale);
+        shaderArea.setUniform("mnmx", current->getMaxHeight());
+        glCheckError(__FILE__,__LINE__);
+
+        drawMesh(&simpleMesh,GL_TRIANGLES);
+        glBindVertexArray(0);
+        shaderArea.setUniform("mnmx", current->getMinHeight());
+        glCheckError(__FILE__,__LINE__);
+        drawMesh(&simpleMesh,GL_TRIANGLES);
+        glBindVertexArray(0);
+
+    }
+    shaderArea.unuse();
+    glDisable (GL_BLEND);
+}
+
+void Terrain::render(Camera *camera) {
+
+    // Use our compiled shader program
+    shaderDebug.use();
+
+    // Load texture
+    GLuint Texture = heightMap->getTexture();
+    // Use texture position 0 on GPU
+    int texturePosition = 0;
+    glActiveTexture(GL_TEXTURE0 + texturePosition);
+    // Bind loaded texture to this texture position
+    glBindTexture(GL_TEXTURE_2D, Texture);
+
+    // Tell shader to sample from this texture position
+    shaderDebug.setUniform("myTextureSampler", texturePosition);
+
+
+    //build renderlist
+    std::stack<Node*> drawStack;
+    for (unsigned int i = 0; i < grid.size(); i++) {
+        for (unsigned int j = 0; j < grid[0].size(); j++) {
+            grid[i][j]->LODSelect( ranges, lodDepth-1, camera, drawStack);
+        }
+    }
+
+    glm::mat4 view = camera->getViewMatrix();
+    glm::mat4 projection = camera->getProjectionMatrix();
+
+    // clear
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0.0,0.0,0.0,0.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glm::vec3 cameraPos = camera->getPosition();
+    shaderDebug.setUniform("projection",projection);
+    shaderDebug.setUniform("view",view);
+    shaderDebug.setUniform("cameraPos", cameraPos);
+
+    //TODO! actually drawing stuff!
+    while( !drawStack.empty() ) {
+        Node* current = drawStack.top();
+        drawStack.pop();
+
+        float s = current->getSize();
+        float l = current->isFullResolution();
+        glm::vec4 color = glm::vec4(0.5, 0.5, 0.5, 1.0);
+        if(s < 2.0) {
+            color = glm::vec4(1.0);
+            if(!l) color = glm::vec4(0.5,1.0,0.5,1.0);
+        } else if(s < 4.0) {
+            color = glm::vec4(0.0,1.0,0.0,1.0);
+            if(!l) color = glm::vec4(0.0,1.0,1.0,1.0);
+        } else if(s < 8.0) {
+            color = glm::vec4(0.0,0.0,1.0,1.0);
+            if(!l) color = glm::vec4(1.0,0.0,1.0,1.0);
+        } else if(s < 16.0) {
+            color = glm::vec4(1.0,1.0,0.0,1.0);
+            if(!l) color = glm::vec4(1.0,0.5,0.0,1.0);
+        } else if(s < 32.0) {
+            color = glm::vec4(0.8,0.5,0.2,1.0);
+            if(!l) color = glm::vec4(1.0,0.0,0.0,1.0);
+        }
+
+        float scale = current->getSize();
+        float range = current->getRange(); //used for interpolation between resolutions
+
+        glm::vec3 translation = glm::vec3(current->getXPos(),0.0,current->getZPos());
+        shaderDebug.setUniform("color",color);
+        shaderDebug.setUniform("translation",translation);
+        shaderDebug.setUniform("scale", scale);
+        shaderDebug.setUniform("range", range);
+        glCheckError(__FILE__,__LINE__);
+
+        if ( current->isFullResolution() ) {
+            drawMesh(&fullResMesh,GL_TRIANGLES);
+        } else {
+            drawMesh(&halfResMesh,GL_TRIANGLES);
+        }
+
+        glBindVertexArray(0);
+
+    }
+    shaderDebug.unuse();
+}
+
 
 

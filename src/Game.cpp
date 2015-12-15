@@ -41,7 +41,13 @@ void Game::loop() {
     if (glfwWindowShouldClose(getWindow()) || !handleUserInput(getWindow(), camera))
         exit();
 
-    terrain->render(camera);
+    if (render_debug_mode)
+        terrain->debugRender(camera);
+    else
+        terrain->render(camera);
+
+    if(render_area_mode)
+        terrain->areaRender(camera);
 }
 
 bool Game::handleUserInput(GLFWwindow* window, Camera *camera){
@@ -123,6 +129,11 @@ bool Game::handleUserInput(GLFWwindow* window, Camera *camera){
         render_debug_mode = !render_debug_mode;
         std::cout << "debug render: " << render_debug_mode << std::endl;
     }
+    if (glfwGetKeyOnce( window, GLFW_KEY_T )){
+        render_area_mode = !render_area_mode;
+        std::cout << "area render: " << render_area_mode << std::endl;
+    }
+
 
 	float FoV = initialFoV;// - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.
 

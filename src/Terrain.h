@@ -15,6 +15,8 @@ class Terrain {
 public:
     Terrain(HeightMap *h);
     virtual ~Terrain();
+    void debugRender(Camera *camera);
+    void areaRender(Camera *camera);
     void render(Camera *camera);
 private:
     HeightMap *heightMap;
@@ -23,12 +25,21 @@ private:
     float leafNodeSize;
     std::vector<int> ranges;
 
-    Shader vertexShader;
-    Shader fragmentShader;
-    ShaderProgram shaderProgram;
+    Shader vertexDebug;
+    Shader fragmentDebug;
+    ShaderProgram shaderDebug;
+
+    Shader vertexTerrain;
+    Shader fragmentTerrain;
+    ShaderProgram shaderTerrain;
+
+    Shader vertexArea;
+    Shader fragmentArea;
+    ShaderProgram shaderArea;
 
     FlatMesh fullResMesh;
     FlatMesh halfResMesh;
+    FlatMesh simpleMesh;
 };
 
 #endif	/* TERRAIN_H */

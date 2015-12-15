@@ -46,6 +46,7 @@ private:
     bool poslock = false;
     bool hidden_cursor = true;
     bool render_debug_mode = false;
+    bool render_area_mode = false;
 };
 
 #endif	/* GAME_H */
