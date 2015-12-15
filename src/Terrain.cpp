@@ -8,19 +8,11 @@
 #include <iostream>
 
 #define SHADER_DIR "../shader/"
-#define FOURCC_DXT1 0x31545844 // Equivalent to "DXT1" in ASCII
-#define FOURCC_DXT3 0x33545844 // Equivalent to "DXT3" in ASCII
-#define FOURCC_DXT5 0x35545844 // Equivalent to "DXT5" in ASCII
 
 Terrain::Terrain(HeightMap *h):
-    vertexDebug(SHADER_DIR"/debugShader.vert",GL_VERTEX_SHADER),
     vertexShader(SHADER_DIR"/basicShader.vert",GL_VERTEX_SHADER),
     fragmentShader(SHADER_DIR"/basicShader.frag",GL_FRAGMENT_SHADER),
     shaderProgram({vertexShader,fragmentShader}),
-    debugShader({vertexDebug,fragmentShader}),
-    vertexTerrain(SHADER_DIR"/terrainShader.vert",GL_VERTEX_SHADER),
-    fragmentTerrain(SHADER_DIR"/terrainShader.frag",GL_FRAGMENT_SHADER),
-    terrainShader({vertexTerrain,fragmentTerrain}),
     fullResMesh(32,32),
     halfResMesh(16,16)
 {
@@ -127,7 +119,7 @@ void Terrain::render(Camera *camera) {
 
         float s = current->getSize();
         float l = current->isFullResolution();
-        glm::vec4 color = glm::vec4(1.0, 0.0, 0.0, 1.0);
+        glm::vec4 color = glm::vec4(0.5, 0.5, 0.5, 1.0);
         if(s < 2.0) {
             color = glm::vec4(1.0);
             if(!l) color = glm::vec4(0.5,1.0,0.5,1.0);
@@ -140,6 +132,9 @@ void Terrain::render(Camera *camera) {
         } else if(s < 16.0) {
             color = glm::vec4(1.0,1.0,0.0,1.0);
             if(!l) color = glm::vec4(1.0,0.5,0.0,1.0);
+        } else if(s < 32.0) {
+            color = glm::vec4(0.8,0.5,0.2,1.0);
+            if(!l) color = glm::vec4(1.0,0.0,0.0,1.0);
         }
 
         float scale = current->getSize();
@@ -158,27 +153,13 @@ void Terrain::render(Camera *camera) {
         glCheckError(__FILE__,__LINE__);
 
         if ( current->isFullResolution() ) {
-            drawMesh(&fullResMesh,GL_TRIANGLES);
+            drawMesh(&fullResMesh,GL_LINES);
         } else {
-            drawMesh(&halfResMesh,GL_TRIANGLES);
+            drawMesh(&halfResMesh,GL_LINES);
         }
 
         glBindVertexArray(0);
         shaderProgram.unuse();
-/*
-        debugShader.use();
-        debugShader.setUniform("projection",projection);
-        debugShader.setUniform("view",view);
-        debugShader.setUniform("color",color);
-        debugShader.setUniform("translation",translation);
-        debugShader.setUniform("scale", scale);
-        debugShader.setUniform("range", range);
-        debugShader.setUniform("max", current->getMaxHeight());
-        glCheckError(__FILE__,__LINE__);
-        drawMesh(&halfResMesh,GL_TRIANGLES);
-        glBindVertexArray(0);
-        debugShader.unuse();
-*/
 
     }
 

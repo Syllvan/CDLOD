@@ -52,6 +52,7 @@ bool Node::LODSelect( std::vector<int> &ranges, int lodLevel, Camera *camera, st
 
         return true;
     } else {
+
         if( !inSphere( ranges[lodLevel-1], camera->getPosition() ) ) {
             fullResolution = true;
             drawStack.push(this);
@@ -59,29 +60,29 @@ bool Node::LODSelect( std::vector<int> &ranges, int lodLevel, Camera *camera, st
             Node *child;
             child = topLeft;
             if ( !child->LODSelect( ranges, lodLevel-1, camera, drawStack) ) {
-                child->fullResolution = false;
-                child->currentRange = currentRange;
+                child->fullResolution = true;
+                child->currentRange = ranges[lodLevel-1];
                 drawStack.push(child);
             }
 
             child = topRight;
             if ( !child->LODSelect( ranges, lodLevel-1, camera, drawStack) ) {
-                child->fullResolution = false;
-                child->currentRange = currentRange;
+                child->fullResolution = true;
+                child->currentRange = ranges[lodLevel-1];
                 drawStack.push(child);
             }
 
             child = bottomLeft;
             if ( !child->LODSelect( ranges, lodLevel-1, camera, drawStack) ) {
-                child->fullResolution = false;
-                child->currentRange = currentRange;
+                child->fullResolution = true;
+                child->currentRange = ranges[lodLevel-1];
                 drawStack.push(child);
             }
 
             child = bottomRight;
             if ( !child->LODSelect( ranges, lodLevel-1, camera, drawStack) ) {
-                child->fullResolution = false;
-                child->currentRange = currentRange;
+                child->fullResolution = true;
+                child->currentRange = ranges[lodLevel-1];
                 drawStack.push(child);
             }
         }

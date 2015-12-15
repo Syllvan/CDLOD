@@ -23,15 +23,9 @@ private:
     float leafNodeSize;
     std::vector<int> ranges;
 
-    Shader vertexDebug;
     Shader vertexShader;
     Shader fragmentShader;
     ShaderProgram shaderProgram;
-    ShaderProgram debugShader;
-
-    ShaderProgram terrainShader;
-    Shader vertexTerrain;
-    Shader fragmentTerrain;
 
     FlatMesh fullResMesh;
     FlatMesh halfResMesh;
