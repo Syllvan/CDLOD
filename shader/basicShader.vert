@@ -32,7 +32,7 @@ void main(void)
 	fWorldPosition = scale*position + translation;
 	float height = getHeight(fWorldPosition.xz);
 	float dist = distance(cameraPos, fWorldPosition);
-	float rangeDist = 1.0 - smoothstep(0.0, 0.1, (range-dist)/scale); //range-dist is positive if within range
+	float rangeDist = 1.0 - smoothstep(0.15, 0.35, (range-dist)/scale*gridDim.x/32.0); //range-dist is positive if within range
 	float morphVal = rangeDist;
 	fColor = color;
 	fWorldPosition.xz = morphVertex(position.xz, fWorldPosition.xz, morphVal);

@@ -12,7 +12,6 @@ uniform sampler2D myTextureSampler;
 
 void main(void)
 {   
-	float fog = 1.0 - smoothstep(80.0, 100.0, fDist);
-	color = fColor*fog;
+	color = fColor;
 	//color = vec4(1,1,1,1);
 }
