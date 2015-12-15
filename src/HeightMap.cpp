@@ -97,6 +97,10 @@ float HeightMap::maxValArea(float x, float z, float w, float h) {
 
 float HeightMap::minValArea(float x, float z, float w, float h) {
     float minVal = 999999.0f;
+    x *= 5.12;
+    z *= 5.12;
+    w *= 5.12;
+    h *= 5.12;
     for(float i = x; i < x+w; i++)
     for(float j = z; j < z+h; j++){
         float newVal = getVal(i,j);

@@ -29,7 +29,7 @@ void main(void)
 	float height = texture( myTextureSampler, vec2(fWorldPosition.x, fWorldPosition.z)/100.0).r;
 	height = (height - 0.5)*20.0;
 	float dist = distance(cameraPos, fWorldPosition);
-	float rangeDist = 1.0 - smoothstep(0.0, 1.0, (range-dist)/scale); //range-dist is positive if within range
+	float rangeDist = 1.0 - smoothstep(0.1, 0.9, (range-dist)/scale); //range-dist is positive if within range
 	float morphVal = rangeDist;
 	fColor = color;
 	fWorldPosition.xz = morphVertex(position.xz, fWorldPosition.xz, morphVal);
