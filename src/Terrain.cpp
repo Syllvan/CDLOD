@@ -13,9 +13,11 @@
 #define FOURCC_DXT5 0x35545844 // Equivalent to "DXT5" in ASCII
 
 Terrain::Terrain(HeightMap *h):
+    vertexDebug(SHADER_DIR"/debugShader.vert",GL_VERTEX_SHADER),
     vertexShader(SHADER_DIR"/basicShader.vert",GL_VERTEX_SHADER),
     fragmentShader(SHADER_DIR"/basicShader.frag",GL_FRAGMENT_SHADER),
     shaderProgram({vertexShader,fragmentShader}),
+    debugShader({vertexDebug,fragmentShader}),
     fullResMesh(32,32),
     halfResMesh(16,16)
 {
@@ -68,14 +70,14 @@ Terrain::~Terrain() {
     }
 }
 
-void drawMesh(FlatMesh *mesh) {
+void drawMesh(FlatMesh *mesh, GLenum type) {
     mesh->bind();
 
     static int inc = 1;
     inc *= 2;
     glCheckError(__FILE__,__LINE__);
         glDrawElements(
-             GL_LINES,      // mode
+             type,      // mode
              mesh->getPointCount(),         // count
              GL_UNSIGNED_INT,   // type
              NULL               // element array buffer offset
@@ -153,13 +155,27 @@ void Terrain::render(Camera *camera) {
         glCheckError(__FILE__,__LINE__);
 
         if ( current->isFullResolution() ) {
-            drawMesh(&fullResMesh);
+            drawMesh(&fullResMesh,GL_LINES);
         } else {
-            drawMesh(&halfResMesh);
+            drawMesh(&halfResMesh,GL_LINES);
         }
 
         glBindVertexArray(0);
         shaderProgram.unuse();
+/*
+        debugShader.use();
+        debugShader.setUniform("projection",projection);
+        debugShader.setUniform("view",view);
+        debugShader.setUniform("color",color);
+        debugShader.setUniform("translation",translation);
+        debugShader.setUniform("scale", scale);
+        debugShader.setUniform("range", range);
+        debugShader.setUniform("max", current->getMaxHeight());
+        glCheckError(__FILE__,__LINE__);
+        drawMesh(&halfResMesh,GL_TRIANGLES);
+        glBindVertexArray(0);
+        debugShader.unuse();
+        */
 
     }
 

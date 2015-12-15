@@ -72,8 +72,8 @@ int HeightMap::getHeight() {
 }
 
 float HeightMap::getVal(float x, float y) {
-    int i = (int)(x*5)%width;
-    int j = (int)(y*5)%height;
+    int i = (int)(x*5.12)%width;
+    int j = (int)(y*5.12)%height;
     unsigned char charval = data[(i + j*width)*3]; //read red color channel
     float val = 20.0f*(charval/255.0f - 0.5f);
     return val;
