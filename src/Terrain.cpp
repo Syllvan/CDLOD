@@ -7,6 +7,8 @@
 
 #include <iostream>
 
+#include <GLFW/glfw3.h>
+
 #define SHADER_DIR "../shader/"
 
 Terrain::Terrain(HeightMap *h):
@@ -276,6 +278,14 @@ void Terrain::render(Camera *camera) {
 
     glm::mat4 view = camera->getViewMatrix();
     glm::mat4 projection = camera->getProjectionMatrix();
+   
+    // glfwGetTime is called only once, the first time this function is called
+    static double lastTime = glfwGetTime();
+
+    // Compute time difference between current and last frame
+    double currentTime = glfwGetTime();
+    float theTime = float(currentTime - lastTime);   
+
 
     // clear
     glClear(GL_COLOR_BUFFER_BIT);
@@ -286,7 +296,7 @@ void Terrain::render(Camera *camera) {
     shaderTerrain.setUniform("projection",projection);
     shaderTerrain.setUniform("view",view);
     shaderTerrain.setUniform("cameraPos", cameraPos);
-
+    shaderTerrain.setUniform("theTime", theTime);
     //TODO! actually drawing stuff!
     while( !drawStack.empty() ) {
         Node* current = drawStack.top();
