@@ -37,7 +37,7 @@ Game::~Game() {
 }
 
 void Game::loop() {
-    glm::mat4 projection = glm::perspective(float(2.0*atan(getHeight()/1920.f)), getWindowRatio(), 0.1f, 100.f);
+    //glm::mat4 projection = glm::perspective(float(2.0*atan(getHeight()/1920.f)), getWindowRatio(), 0.1f, 100.f);
     if (glfwWindowShouldClose(getWindow()) || !handleUserInput(getWindow(), camera))
         exit();
 
@@ -149,11 +149,15 @@ bool Game::handleUserInput(GLFWwindow* window, Camera *camera){
 	// For the next frame, the "last time" will be "now"
 	lastTime = currentTime;
 
-
+    camera->FoV = FoV;
+    camera->far = 100.0f;
+    camera->near = 0.1f;
 	camera->projectionMatrix = ProjectionMatrix;
 	camera->viewMatrix = ViewMatrix;
 	if(!poslock) camera->position = position;
-	camera->direction = direction;
+	if(!poslock) camera->direction = direction;
+	if(!poslock) camera->up = up;
+	if(!poslock) camera->right = right;
 
 	return true;
 }

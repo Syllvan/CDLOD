@@ -110,6 +110,8 @@ bool Node::inSphere(float radius, glm::vec3 position) {
 }
 
 bool Node::inFrustum(Camera *camera) {
-    //TODO
-    return true;
+    glm::vec3 min_v = glm::vec3(xPos, minHeight, zPos);
+    glm::vec3 max_v = glm::vec3(xPos+size, maxHeight, zPos+size);
+
+    return camera->AABBInsideFrustum(max_v,min_v);
 }
