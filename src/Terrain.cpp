@@ -35,7 +35,7 @@ Terrain::Terrain(HeightMap *h):
     //construct level of detail ranges
     ranges.push_back(1);
     for (int i = 1; i < lodDepth; i++) {
-        ranges.push_back(ranges[i-1] + pow(2.1,i));
+        ranges.push_back(ranges[i-1] + pow(2,i));
         std::cout << ranges[i-1] << std::endl;
     }
 
@@ -278,13 +278,13 @@ void Terrain::render(Camera *camera) {
 
     glm::mat4 view = camera->getViewMatrix();
     glm::mat4 projection = camera->getProjectionMatrix();
-   
+
     // glfwGetTime is called only once, the first time this function is called
     static double lastTime = glfwGetTime();
 
     // Compute time difference between current and last frame
     double currentTime = glfwGetTime();
-    float theTime = float(currentTime - lastTime);   
+    float theTime = float(currentTime - lastTime);
 
 
     // clear

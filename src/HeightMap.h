@@ -6,7 +6,7 @@
 
 class HeightMap {
 public:
-    HeightMap(char* filepath);
+    HeightMap(std::string filepath);
     virtual ~HeightMap();
 
     int getWidth();

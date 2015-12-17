@@ -27,17 +27,23 @@ float getHeight(vec2 v) {
 
 void main(void)
 {
+	float morphStart = 0.0;
+	float morphEnd = 0.25;
+
 	fWorldPosition = scale*position + translation;
 	float height = getHeight(fWorldPosition.xz);
+	fWorldPosition.y = height; 
 	float dist = distance(cameraPos, fWorldPosition);
-	float rangeDist = 1.0 - smoothstep(0.15, 0.35, (range-dist)/scale*gridDim.x/32.0); //range-dist is positive if within range
+	float nextlevel_thresh = ((range-dist)/scale*gridDim.x/32.0); //positive if within range
+	float rangeDist = 1.0 - smoothstep(morphStart, morphEnd, nextlevel_thresh);
+
 	float morphVal = rangeDist;
 	fWorldPosition.xz = morphVertex(position.xz, fWorldPosition.xz, morphVal);
 	height = getHeight(fWorldPosition.xz);
-    
+	
+	// * 0.5*(sin(fWorldPosition.x) + sin(fWorldPosition.z));
 	//height!
 	fWorldPosition.y = height; 
-	// * 0.5*(sin(fWorldPosition.x) + sin(fWorldPosition.z));
 
     fPosition = view * vec4(fWorldPosition,1.0);
 

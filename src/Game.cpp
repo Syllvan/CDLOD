@@ -14,17 +14,17 @@ char keyOnce[GLFW_KEY_LAST + 1];
      (keyOnce[KEY] ? false : (keyOnce[KEY] = true)) :   \
      (keyOnce[KEY] = false))
 
-Game::Game()
+Game::Game(std::string imagepath)
     : Application()
 {
-    //init
+        //init
     glCheckError(__FILE__,__LINE__);
 
     glm::vec3 position = glm::vec3(0.0f);
     glm::vec3 direction = glm::vec3(0.0f,0.0f,1.0f);
 
     camera = new Camera(position, direction);
-    heightMap = new HeightMap("../Textures/fractalnoise.bmp");
+    heightMap = new HeightMap(imagepath);
     terrain = new Terrain(heightMap);
     glfwSetInputMode(getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
     glfwSetInputMode(getWindow(), GLFW_STICKY_KEYS, 1);

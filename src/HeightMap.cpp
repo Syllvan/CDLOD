@@ -6,13 +6,13 @@
 #include <iostream>
 
 //http://www.opengl-tutorial.org/beginners-tutorials/tutorial-5-a-textured-cube/
-HeightMap::HeightMap(char* filepath) {
+HeightMap::HeightMap(std::string filepath) {
     // Data read from the header of the BMP file
     unsigned char header[54]; // Each BMP file begins by a 54-bytes header
     unsigned int dataPos;     // Position in the file where the actual data begins
     unsigned int imageSize;   // = width*height*3
 
-    FILE * file = fopen(filepath,"rb");
+    FILE * file = fopen(filepath.c_str(),"rb");
     if (!file) {
         perror("Image could not be opened\n");
     }

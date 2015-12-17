@@ -13,7 +13,7 @@
 
 class Game : public Application {
 public:
-    Game();
+    Game(std::string imagepath);
     virtual ~Game();
     GLuint loadDDS(const char * imagepath);
 
@@ -45,7 +45,7 @@ private:
 
     bool poslock = false;
     bool hidden_cursor = true;
-    bool render_debug_mode = false;
+    bool render_debug_mode = true;
     bool render_area_mode = false;
 };
 

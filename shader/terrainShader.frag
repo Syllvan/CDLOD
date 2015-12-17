@@ -6,7 +6,7 @@ in float fDist;
 in vec3 fNormal;
 
 // output
-//out vec4 color;
+out vec4 color;
 
 // uniform
 uniform sampler2D myTextureSampler;
@@ -68,6 +68,6 @@ float nestedNoise(vec2 p) {
 void main() {
   vec2 p = fWorldPosition.xz * 6.;
   float brightness = nestedNoise(p);
-  gl_FragColor.rgb = vec3(brightness);
-  gl_FragColor.a = 1.;
+  color.rgb = vec3(brightness);
+  color.a = 1.;
 }
