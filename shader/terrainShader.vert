@@ -15,6 +15,7 @@ out vec4 fPosition;
 out vec3 fWorldPosition;
 out float fDist;
 out vec3 fNormal;
+out vec2 screenPos;
 
 vec2 morphVertex( vec2 gridPos, vec2 worldPos, float morph) {
 	vec2 fracPart = fract(gridPos * gridDim.xy * 0.5) * 2.0 / gridDim.xy;
@@ -49,4 +50,5 @@ void main(void)
 
     fDist = dist;
     gl_Position = projection * fPosition;
+    screenPos = gl_Position.xy;
 }

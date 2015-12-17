@@ -286,11 +286,12 @@ void Terrain::render(Camera *camera) {
     double currentTime = glfwGetTime();
     float theTime = float(currentTime - lastTime);
 
-
     // clear
     glClear(GL_COLOR_BUFFER_BIT);
     if (camera->option == 1)
         glClearColor(1.0,1.0,1.0,1.0);
+    else if (camera->option == 2)
+        glClearColor(0.5,0.8,0.95,1.0);
     else
         glClearColor(0.0,0.0,0.0,0.0);
 

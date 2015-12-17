@@ -141,6 +141,12 @@ bool Game::handleUserInput(GLFWwindow* window, Camera *camera){
         camera->option = 3;
     } else if (glfwGetKeyOnce( window, GLFW_KEY_4 )){
         camera->option = 4;
+    } else if (glfwGetKeyOnce( window, GLFW_KEY_5 )){
+        camera->option = 5;
+    } else if (glfwGetKeyOnce( window, GLFW_KEY_6 )){
+        camera->option = 6;
+    } else if (glfwGetKeyOnce( window, GLFW_KEY_7 )){
+        camera->option = 7;
     }
 
 
