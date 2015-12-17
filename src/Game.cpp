@@ -133,6 +133,15 @@ bool Game::handleUserInput(GLFWwindow* window, Camera *camera){
         render_area_mode = !render_area_mode;
         std::cout << "area render: " << render_area_mode << std::endl;
     }
+    if (glfwGetKeyOnce( window, GLFW_KEY_1 )){
+        camera->option = 1;
+    } else if (glfwGetKeyOnce( window, GLFW_KEY_2 )){
+        camera->option = 2;
+    } else if (glfwGetKeyOnce( window, GLFW_KEY_3 )){
+        camera->option = 3;
+    } else if (glfwGetKeyOnce( window, GLFW_KEY_4 )){
+        camera->option = 4;
+    }
 
 
 	float FoV = initialFoV;// - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.

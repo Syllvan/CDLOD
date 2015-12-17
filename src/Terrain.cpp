@@ -289,7 +289,11 @@ void Terrain::render(Camera *camera) {
 
     // clear
     glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(0.0,0.0,0.0,0.0);
+    if (camera->option == 1)
+        glClearColor(1.0,1.0,1.0,1.0);
+    else
+        glClearColor(0.0,0.0,0.0,0.0);
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glm::vec3 cameraPos = camera->getPosition();
@@ -297,6 +301,7 @@ void Terrain::render(Camera *camera) {
     shaderTerrain.setUniform("view",view);
     shaderTerrain.setUniform("cameraPos", cameraPos);
     shaderTerrain.setUniform("theTime", theTime);
+    shaderTerrain.setUniform("option", camera->option);
     //TODO! actually drawing stuff!
     while( !drawStack.empty() ) {
         Node* current = drawStack.top();

@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+#define PI 3.14159265359
+
 Camera::Camera() {
 }
 
@@ -18,23 +20,20 @@ Camera::Camera(glm::vec3 position, glm::vec3 direction) {
 
     leftPlane;
     leftPlane.point = position;
-    glm::vec3 dirLeft = glm::normalize(direction + 0.4f*(-right - direction));
-    leftPlane.normal = glm::cross(dirLeft,up);
+    float angle = PI/2.0f + FoV/2.0f + 0.1f;
+    leftPlane.normal = glm::vec3(glm::rotate(glm::mat4(),angle,up)*glm::vec4(direction,1.0f));
 
     rightPlane;
     rightPlane.point = position;
-    glm::vec3 dirRight = glm::normalize(direction + 0.4f*(right - direction));
-    rightPlane.normal = -glm::cross(dirRight,up);
+    rightPlane.normal = glm::vec3(glm::rotate(glm::mat4(),-angle,up)*glm::vec4(direction,1.0f));
 
     topPlane;
     topPlane.point = position;
-    glm::vec3 dirTop = glm::normalize(direction + 0.4f*(up - direction));
-    topPlane.normal = glm::cross(dirTop,right);
+    topPlane.normal = glm::vec3(glm::rotate(glm::mat4(),angle,right)*glm::vec4(direction,1.0f));
 
     bottomPlane;
     bottomPlane.point = position;
-    glm::vec3 dirBottom = glm::normalize(direction + 0.4f*(-up - direction));
-    bottomPlane.normal = -glm::cross(dirBottom,right);
+    bottomPlane.normal = glm::vec3(glm::rotate(glm::mat4(),-angle,right)*glm::vec4(direction,1.0f));
 }
 
 Camera::Camera(const Camera& orig) {

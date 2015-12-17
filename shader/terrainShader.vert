@@ -48,11 +48,5 @@ void main(void)
     fPosition = view * vec4(fWorldPosition,1.0);
 
     fDist = dist;
-
-    float dx = 0.02;
-    float x = getHeight(fWorldPosition.xz + vec2(1.0,0.0)) - getHeight(fWorldPosition.xz + vec2(-1.0,0.0));
-    float z = getHeight(fWorldPosition.xz + vec2(0.0,1.0)) - getHeight(fWorldPosition.xz + vec2(0.0,-1.0));
-    fNormal = normalize(vec3(x/dx,1.0,z/dx));
-
     gl_Position = projection * fPosition;
 }

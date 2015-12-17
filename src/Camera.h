@@ -47,6 +47,8 @@ public:
     float far = 100.0f;
     float near = 0.1f;
 
+    int option = 1;
+
 private:
 };
 
