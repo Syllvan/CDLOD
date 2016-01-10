@@ -81,7 +81,7 @@ void main(void)
   float nx = (getHeightD(fWorldPosition.xz + vec2(dx,0.0)) - getHeightD(fWorldPosition.xz + vec2(-dx,0.0)))/(2.0*dx);
   float ny = 1.0;
   float nz = (getHeightD(fWorldPosition.xz + vec2(0.0,dx)) - getHeightD(fWorldPosition.xz + vec2(0.0,-dx)))/(2.0*dx);
-  vec3 normal = vec3(nx,ny,nz);
+  vec3 normal = normalize(vec3(nx,ny,nz));
 
   vec3 eyedir = normalize(cameraPos - fWorldPosition); 
   vec3 refdir = normalize(-reflect(sundir,normal));
